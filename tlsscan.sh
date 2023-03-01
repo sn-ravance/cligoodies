@@ -16,7 +16,7 @@
 #
 # Test if testssl.sh is installed
 # Check to be sure the file isn't empty
-# Skip lines that isn't a number
+# Skip lines that isn't a number or commented out
 # Check if its in the range of 0 to 65535
 # Accept any port list format - nmap grepable, csv, etc.
 #
