@@ -1,7 +1,11 @@
 #
+# Description
+#
+# Parse a CSV file with IP addresses or FQDN and do a reverse lookup
+#
 ## Purpose
-# 
-# Map the internal IP Address to the Externally accessible IP based on the FQDN
+#
+# A Splunk helper file
 #
 ## Instructions
 #
