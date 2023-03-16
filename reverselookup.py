@@ -67,17 +67,17 @@ class status:
 def domain_name(ip_addr):
   try:
     dom_name = socket.gethostbyaddr(ip_addr)
-    print(f"{status.OKGREEN} The domain name for " + ip_addr + " is", dom_name)
-  except:
-    print(f"{status.FAIL} Could not resolve " + ip_addr + " for", dom_name)
+    print(f"{status.OKGREEN} The domain name for {ip_addr} is {dom_name}")
+  except socket.gaierror as e:
+    print(f"{status.FAIL} Could not resolve {ip_addr} for {dom_name}, error raised is {e}")
   return dom_name
 
 def ip_address(fqdn):
   try:
     ip_addr = socket.gethostbyip(fqdn)
-    print(f"{status.OKGREEN} The IP Address for " + fqdn + " is", ip_addr)
-  except:
-    print(f"{status.FAIL} Could not resolve " + fqdn + " for", ip_addr)
+    print(f"{status.OKGREEN} The IP Address for {fqdn} is {ip_addr}")
+  except socket.gaierror as e:
+    print(f"{status.FAIL} Could not resolve {fqdn} for {ip_addr}, error raised is {e}")
   return ip_addr
 
 with open(infile, 'r') as read_obj, open(outfile, 'w', newline='') as write_obj:
