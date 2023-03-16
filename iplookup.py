@@ -1,4 +1,10 @@
 #
+## Purpose
+# 
+# Map the internal IP Address to the Externally accessible IP based on the FQDN
+#
+## Instructions
+#
 # 1. Run the following query in Splunk to discover all of the internal assets
 #
 # index="name of index" source="name of source" 
