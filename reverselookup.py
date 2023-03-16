@@ -2,6 +2,7 @@
 ## Instructions
 #
 # 1. Run the following query in Splunk to discover all of the internal assets
+#    by IP Addresses and DNS names
 #
 # index="name of index" sourcetype="name of source" 
 # | where dns_request_queried_domain like "%.<target domain name>.com" 
@@ -36,7 +37,7 @@ Description:
 Identify DNS names (or IP Address) that are resolvable externally.
 
 Potential Use Case:
-A list of internal DNS names and IP Addresses.
+A list of internal DNS names and IP Addresses that are resolvable externally.
 
 Prerequisite:
 A CSV file containing a list of IP Addresses and/or FQDN.
