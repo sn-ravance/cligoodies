@@ -1,5 +1,6 @@
-# Import the required module
-Import-Module ImportExcel
+# Import required modules
+Install-Module -Name ImportExcel
+Install-Module -Name ExchangeOnlineManagement
 
 # Specify the path to the Excel spreadsheet
 $excelPath = "C:\Path\To\Your\Spreadsheet.xlsx"
@@ -7,8 +8,8 @@ $excelPath = "C:\Path\To\Your\Spreadsheet.xlsx"
 # Load the Excel data
 $data = Import-Excel -Path $excelPath
 
-# Initialize Outlook COM object
-$outlook = New-Object -ComObject Outlook.Application
+# Connect to Exchange Online
+Connect-ExchangeOnline
 
 # Loop through each row until a blank cell is encountered in column B (email address)
 foreach ($row in $data) {
@@ -19,13 +20,11 @@ foreach ($row in $data) {
         break
     }
 
-    # Check if the email address is disabled in Outlook
-    $addressEntry = $outlook.Session.CreateRecipient($email)
-    $exchangeUser = $addressEntry.AddressEntry.GetExchangeUser()
-    $isDisabled = $exchangeUser.AccountDisabled
+    # Check if the email address is active in Exchange Online
+    $user = Get-EXOMailbox -Identity $email -ErrorAction SilentlyContinue
 
     # If the email address is disabled, highlight the row in yellow
-    if ($isDisabled) {
+    if (!$user) {
         $row | Add-Member -NotePropertyName "Style" -NotePropertyValue @{Background = "Yellow"}
     }
 }
@@ -33,9 +32,5 @@ foreach ($row in $data) {
 # Save the modified data to a new Excel file
 $outputPath = "C:\Path\To\Your\ModifiedSpreadsheet.xlsx"
 $data | Export-Excel -Path $outputPath
-
-# Clean up the Outlook COM object
-[System.Runtime.Interopservices.Marshal]::ReleaseComObject($outlook) | Out-Null
-Remove-Variable -Name outlook
 
 Write-Host "Verification completed. Modified spreadsheet saved to: $outputPath"
