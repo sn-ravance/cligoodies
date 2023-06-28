@@ -1,7 +1,7 @@
 #!/bin/bash
 
 csv_file="inactive.csv"
-bearer_token=""
+bearer_token="KEY"
 
 if [ ! -f "$csv_file" ]; then
   echo "CSV File $csv_file does not exist."
