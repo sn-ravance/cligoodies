@@ -9,7 +9,7 @@
 # The flattened data is written to the output file, with each row in the input file being extended with the corresponding flattened data.
 #
 
-arg_desc = '''\
+arg_desc = """\
 Author: Rob Vance 
 Version: 1.0
 Date: 07/16/2023
@@ -19,28 +19,32 @@ The purpose of the script is to flatten JSON data from Azure Resource Graph Expl
 
 Prerequisite:
 The CSV output from a Azure Resource Graph Explorer query
-        '''
+        """
 
 import argparse
 import csv
 import json
 
-def flatten_json(json_data, prefix=''):
+
+def flatten_json(json_data, prefix=""):
     flattened_data = {}
     for key, value in json_data.items():
         new_key = prefix + key if prefix else key
         if isinstance(value, dict):
-            flattened_data.update(flatten_json(value, new_key + '_'))
+            flattened_data.update(flatten_json(value, new_key + "_"))
         else:
             flattened_data[new_key] = value
     return flattened_data
 
+
 # Create an ArgumentParser object
-parser = argparse.ArgumentParser(formatter_class = argparse.RawDescriptionHelpFormatter,description=arg_desc)
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter, description=arg_desc
+)
 
 # Add the arguments
-parser.add_argument('input_file', help='Path to the input CSV file')
-parser.add_argument('output_file', help='Path to the output CSV file')
+parser.add_argument("input_file", help="Path to the input CSV file")
+parser.add_argument("output_file", help="Path to the output CSV file")
 
 # Parse the command-line arguments
 args = parser.parse_args()
@@ -50,7 +54,7 @@ output_file = args.output_file  # Path to the output CSV file
 
 # Read the input file and extract JSON data from all columns
 json_data_list = []
-with open(input_file, 'r') as file:
+with open(input_file, "r") as file:
     reader = csv.DictReader(file)
     headers = reader.fieldnames
     for row in reader:
@@ -75,7 +79,7 @@ for flattened_data in flattened_data_list:
     unique_keys.update(flattened_data.keys())
 
 # Read the original input file again
-with open(input_file, 'r') as file:
+with open(input_file, "r") as file:
     reader = csv.reader(file)
     header = next(reader)  # Read the header
 
@@ -83,14 +87,16 @@ with open(input_file, 'r') as file:
     header += list(unique_keys)
 
     # Write the flattened data to the output file
-    with open(output_file, 'w', newline='') as output_file:
+    with open(output_file, "w", newline="") as output_file:
         writer = csv.writer(output_file)
+        #writer = unicode_csv.UnicodeWriter(output_file)
         writer.writerow(header)  # Write the modified header
         for i, row in enumerate(reader):
             if i < len(flattened_data_list):
-                writer.writerow(row + [flattened_data_list[i].get(key, '') for key in unique_keys])
+                writer.writerow(
+                    row + [flattened_data_list[i].get(key, "") for key in unique_keys]
+                )
             else:
                 writer.writerow(row)
 
 print("Flattened data saved to 'output.csv'.")
-
